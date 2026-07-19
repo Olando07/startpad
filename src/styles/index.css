@@ -1,0 +1,7 @@
+@tailwind base;      /* Injects base styles (normalize/reset) */
+@tailwind components;/* Injects component classes */
+@tailwind utilities; /* Injects utility classes */   
+
+body {
+    color: black;
+}

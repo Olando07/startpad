@@ -8,6 +8,7 @@ declare global {
 			close: () => Promise<void>;
 			getApps: () => Promise<string[]>;
 			launchApp: (path: string) => Promise<void>;
+			getIcon: (path: string) => Promise<string>;
 		};
 	}
 }

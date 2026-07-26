@@ -35,7 +35,7 @@ const createWindow = () => {
 	}
 
 	ipcMain.handle("window-minimize", () => mainWindow.minimize() );
-	ipcMain.handle("window-maximize", () => mainWindow.maximize() );
+	ipcMain.handle("window-maximize", () => { if (mainWindow.isMaximized()) { mainWindow.unmaximize() } else { mainWindow.maximize() } });
     ipcMain.handle("window-close", () => mainWindow.close());
   
 	ipcMain.handle("get-apps", ():string[] => {
@@ -48,7 +48,11 @@ const createWindow = () => {
 
 		return apps;
 	});
-	ipcMain.handle("launch-app", (_event, appPath: string) => {shell.openPath(appPath)});
+	ipcMain.handle("launch-app", (_event, appPath: string) => { shell.openPath(appPath) });
+	ipcMain.handle("get-icon", async (_event, appPath: string) => {
+		const icon = await app.getFileIcon(appPath, { size: 'large' })
+		return icon.toDataURL()
+	})
 
 	// Open the DevTools.
 	mainWindow.webContents.openDevTools();

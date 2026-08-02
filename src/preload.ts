@@ -8,6 +8,8 @@ contextBridge.exposeInMainWorld("api", {
 
 	// app management
 	getApps: () => ipcRenderer.invoke("get-apps"),
-	getIcon: (path: string) => ipcRenderer.invoke('get-icon', path),
+	getIcon: (path: string) => ipcRenderer.invoke("get-icon", path),
 	launchApp: (path: string) => ipcRenderer.invoke("launch-app", path),
+	getStore: (key: string) => ipcRenderer.invoke("get-store", key),
+	setStore: (key: string, value: unknown) => ipcRenderer.invoke("set-store", key, value),
 });

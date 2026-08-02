@@ -2,11 +2,14 @@ import { app, BrowserWindow, ipcMain, shell } from "electron";
 import path from "node:path";
 import fs from "node:fs";
 import started from "electron-squirrel-startup";
+const Store = require("electron-store");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
 	app.quit();
 }
+
+const store = new Store();
 
 const createWindow = () => {
 	// Create the browser window.
@@ -34,25 +37,41 @@ const createWindow = () => {
 		mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
 	}
 
-	ipcMain.handle("window-minimize", () => mainWindow.minimize() );
-	ipcMain.handle("window-maximize", () => { if (mainWindow.isMaximized()) { mainWindow.unmaximize() } else { mainWindow.maximize() } });
-    ipcMain.handle("window-close", () => mainWindow.close());
-  
-	ipcMain.handle("get-apps", ():string[] => {
+	ipcMain.handle("window-minimize", () => mainWindow.minimize());
+	ipcMain.handle("window-maximize", () => {
+		if (mainWindow.isMaximized()) {
+			mainWindow.unmaximize();
+		} else {
+			mainWindow.maximize();
+		}
+	});
+	ipcMain.handle("window-close", () => mainWindow.close());
+
+	ipcMain.handle("get-apps", (): string[] => {
 		let system = "";
-		if(process.platform == 'win32') {system = "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs";}
-		if(process.platform == 'darwin') {system = "/Applications";}
-		if (process.platform == 'linux') { system = "/usr/share/applications"; }
-		
+		if (process.platform == "win32") {
+			system = "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs";
+		}
+		if (process.platform == "darwin") {
+			system = "/Applications";
+		}
+		if (process.platform == "linux") {
+			system = "/usr/share/applications";
+		}
+
 		const apps = fs.readdirSync(system);
 
 		return apps;
 	});
-	ipcMain.handle("launch-app", (_event, appPath: string) => { shell.openPath(appPath) });
+	ipcMain.handle("launch-app", (_event, appPath: string) => {
+		shell.openPath(appPath);
+	});
 	ipcMain.handle("get-icon", async (_event, appPath: string) => {
-		const icon = await app.getFileIcon(appPath, { size: 'large' })
-		return icon.toDataURL()
-	})
+		const icon = await app.getFileIcon(appPath, { size: "large" });
+		return icon.toDataURL();
+	});
+	ipcMain.handle("get-store", (_event, key: string)=>{return store.get(key)});
+	ipcMain.handle("set-store", (_event, key: string, value: unknown) => {store.set(key, value)});
 
 	// Open the DevTools.
 	mainWindow.webContents.openDevTools();

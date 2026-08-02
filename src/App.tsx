@@ -15,8 +15,8 @@ function App() {
 
 			const match = presets
 				.filter((w) => w.activeTime)
-				.sort((a, b) => (a.activeTime > b.activeTime ? -1 : 1))
-				.find((w) => w.activeTime <= currentTime);
+				.sort((a, b) => (a.activeTime! > b.activeTime! ? -1 : 1))
+				.find((w) => w.activeTime! <= currentTime);
 
 			if (match) setActiveId(match.id);
 		})

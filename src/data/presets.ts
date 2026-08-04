@@ -1,47 +1,48 @@
-export interface App {
+export interface Site {
 	name: string;
-	path: string;
+	url: string;
 	icon?: string;
 }
 
 export interface Workspace {
 	id: string;
 	label: string;
-	apps: App[];
+	sites: Site[];
 	activeTime?: string;
 }
 
 export const presets: Workspace[] = [
-	// gaming workspace
 	{
 		id: "gaming",
 		label: "Gaming",
 		activeTime: "18:00",
-		apps: [
-			{ name: "Spotify", path: "C:/Users/oland/AppData/Roaming/Spotify/Spotify.exe" },
-			{ name: "Discord", path: "C:/Users/oland/AppData/Local/Discord/Update.exe --processStart Discord.exe" },
+		sites: [
+			{ name: "Spotify", url: "https://open.spotify.com" },
+			{ name: "Discord", url: "https://discord.com/app" },
+			{ name: "Twitch", url: "https://twitch.tv" },
+			{ name: "Steam", url: "https://store.steampowered.com" },
 		],
 	},
-	// wfh workspace
 	{
 		id: "work",
 		label: "Work",
 		activeTime: "08:00",
-		apps: [
-			{ name: "VS Code", path: "C:/Users/oland/AppData/Local/Programs/Microsoft VS Code/Code.exe" },
-			{ name: "Chrome", path: "C:/Program Files/Google/Chrome/Application/chrome.exe" },
+		sites: [
+			{ name: "Gmail", url: "https://mail.google.com" },
+			{ name: "Google Calendar", url: "https://calendar.google.com" },
+			{ name: "Notion", url: "https://notion.so" },
+			{ name: "Slack", url: "https://app.slack.com" },
 		],
 	},
-	// dev workspace
 	{
 		id: "development",
 		label: "Development",
 		activeTime: "13:00",
-		apps: [
-			{ name: "VS Code", path: "C:/Users/oland/AppData/Local/Programs/Microsoft VS Code/Code.exe" },
-			{ name: "Chrome", path: "C:/Program Files/Google/Chrome/Application/chrome.exe" },
-			{ name: "Spotify", path: "C:/Users/oland/AppData/Roaming/Spotify/Spotify.exe" },
+		sites: [
+			{ name: "GitHub", url: "https://github.com" },
+			{ name: "Spotify", url: "https://open.spotify.com" },
+			{ name: "Stack Overflow", url: "https://stackoverflow.com" },
+			{ name: "MDN", url: "https://developer.mozilla.org" },
 		],
 	},
-	// creative workspace
-]
+];

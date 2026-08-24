@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { LibrarySite } from "../data/site-library";
 import { siteLibrary } from "../data/site-library";
 import toast from "react-hot-toast";

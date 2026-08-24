@@ -1,4 +1,3 @@
-import React from "react";
 import type { Workspace } from "../data/presets";
 
 interface SidebarProps {

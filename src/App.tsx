@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import AppGrid from "./components/AppGrid";
-import Modal from "./components/Modal"; 
+import Modal from "./components/Modal";
 import { presets, type Workspace } from "./data/presets";
 import "./styles/index.css";
 

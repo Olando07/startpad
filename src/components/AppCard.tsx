@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { Site } from "../data/presets";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -10,14 +10,14 @@ interface AppCardProps {
 }
 
 function AppCard({ site, isEditing, onRemove }: AppCardProps) {
-	const [iconUrl, setIconUrl] = useState<string>(`https://www.google.com/s2/favicons?domain=${site.url}&sz=64`);
+	const [iconUrl] = useState<string>(`https://www.google.com/s2/favicons?domain=${site.url}&sz=64`);
 
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: site.url });
 
-		const style = {
-			transform: CSS.Transform.toString(transform),
-			transition,
-		};
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+	};
 
 	return (
 		<div ref={setNodeRef} style={style} {...(isEditing ? { ...attributes, ...listeners } : {})} className="relative flex flex-col w-24 items-center gap-2 p-2 rounded-xl bg-slate-700 hover:bg-slate-600 cursor-pointer transition-colors" onClick={() => window.open(site.url, "_blank")}>

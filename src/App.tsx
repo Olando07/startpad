@@ -45,7 +45,27 @@ function App() {
 	return (
 		<div className="flex flex-col h-screen w-screen overflow-hidden">
 			<div className="app-shell flex flex-row overflow-hidden flex-1">
-				<Sidebar workspaces={workspaces} activeId={activeId} onSelect={(id) => setActiveId(id)} isEditing={isEditing} onToggleEdit={toggleEdit} onToggleModal={toggleModal} />
+				<Sidebar
+					workspaces={workspaces}
+					activeId={activeId}
+					onSelect={(id) => setActiveId(id)}
+					isEditing={isEditing}
+					onToggleEdit={toggleEdit}
+					onToggleModal={toggleModal}
+					onAddWorkspace={(name) => {
+						const newWorkspace = {
+							id: name.toLowerCase().replace(/\s+/g, "-"),
+							label: name,
+							sites: [],
+						};
+						setWorkspaces([...workspaces, newWorkspace]);
+					}}
+					onDeleteWorkspace={(id) => {
+						const updated = workspaces.filter((w: Workspace) => w.id !== id);
+						setWorkspaces(updated);
+						if (activeId === id) setActiveId(updated[0]?.id ?? "");
+					}}
+				/>
 				{isModalOpen && (
 					<Modal
 						onClose={toggleModal}

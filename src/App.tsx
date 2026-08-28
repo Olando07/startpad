@@ -24,6 +24,9 @@ function App() {
 	const [isEditing, setIsEditing] = useState(false);
 	const toggleEdit = () => setIsEditing((prev) => !prev);
 
+	const [isSitesEditing, setIsSitesEditing] = useState(false);
+	const toggleSitesEdit = () => setIsSitesEditing((prev) => !prev);
+
 	useEffect(() => {
 		const checkTime = () => {
 			const now = new Date();
@@ -48,8 +51,8 @@ function App() {
 				<Sidebar
 					workspaces={workspaces}
 					activeId={activeId}
-					onSelect={(id) => setActiveId(id)}
 					isEditing={isEditing}
+					onSelect={(id) => setActiveId(id)}
 					onToggleEdit={toggleEdit}
 					onToggleModal={toggleModal}
 					onAddWorkspace={(name) => {
@@ -64,6 +67,12 @@ function App() {
 						const updated = workspaces.filter((w: Workspace) => w.id !== id);
 						setWorkspaces(updated);
 						if (activeId === id) setActiveId(updated[0]?.id ?? "");
+					}}
+					isSitesEditing={isSitesEditing}
+					onToggleSitesEdit={toggleSitesEdit}
+					onRenameWorkspace={(id, name) => {
+						const updated = workspaces.map((w: Workspace) => (w.id === id ? { ...w, label: name } : w));
+						setWorkspaces(updated);
 					}}
 				/>
 				{isModalOpen && (
@@ -80,7 +89,7 @@ function App() {
 				<main className="flex-1 px-10 py-6 overflow-y-auto overflow-x-hidden">
 					<AppGrid
 						sites={activeWorkspace?.sites ?? []}
-						isEditing={isEditing}
+						isEditing={isSitesEditing}
 						onRemove={(url) => {
 							const updated = workspaces.map((w: Workspace) => (w.id === activeId ? { ...w, sites: w.sites.filter((s) => s.url !== url) } : w));
 							setWorkspaces(updated);

@@ -94,7 +94,7 @@ function App() {
 						}}
 					/>
 				)}
-				<main className="flex-1 px-10 py-6 overflow-y-auto overflow-x-hidden">
+				<main className="flex-1 px-12 py-8 overflow-y-auto overflow-x-hidden">
 					<AppGrid
 						sites={activeWorkspace?.sites ?? []}
 						isEditing={isSitesEditing}

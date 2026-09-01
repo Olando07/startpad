@@ -7,11 +7,13 @@ import AppCard from "./AppCard";
 interface AppGridProps {
 	sites: Site[];
 	isEditing: boolean;
+	userName: string;
+	onToggleAddSite: () => void;
 	onRemove: (url: string) => void;
 	onReorder: (sites: Site[]) => void;
 }
 
-function AppGrid({ sites, isEditing, onRemove, onReorder }: AppGridProps) {
+function AppGrid({ sites, isEditing, userName, onToggleAddSite, onRemove, onReorder }: AppGridProps) {
 	const sensors = useSensors(
 		useSensor(MouseSensor, {
 			activationConstraint: {
@@ -30,12 +32,16 @@ function AppGrid({ sites, isEditing, onRemove, onReorder }: AppGridProps) {
 		}
 	};
 
-	const name = "lando";
 	return (
 		<>
 			<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToWindowEdges]}>
 				<SortableContext items={sites.map((s) => s.url)} strategy={rectSortingStrategy}>
-					<div className="mb-8 text-xl text-teal-400 font-comic">Hey {name}, welcome to your start page</div>
+					<div className="mb-8 flex items-center justify-between">
+						<div className="text-xl text-teal-400 font-comic">Hey {userName}, welcome to your start page</div>
+						<button onClick={onToggleAddSite} className="bg-teal-400 hover:bg-teal-500 px-4 py-2 rounded-md text-slate-900 font-semibold transition-colors">
+							+ Add Site
+						</button>
+					</div>
 					<div className="flex flex-wrap gap-14 max-w-full">
 						{sites.map((site) => (
 							<AppCard key={`${site.name}-${site.url}`} site={site} isEditing={isEditing} onRemove={onRemove} />

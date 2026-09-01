@@ -36,13 +36,15 @@ function AppGrid({ sites, isEditing, userName, onToggleAddSite, onRemove, onReor
 		<>
 			<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToWindowEdges]}>
 				<SortableContext items={sites.map((s) => s.url)} strategy={rectSortingStrategy}>
-					<div className="mb-8 flex items-center justify-between">
-						<div className="text-xl text-teal-400 font-comic">Hey {userName}, welcome to your start page</div>
-						<button onClick={onToggleAddSite} className="bg-teal-400 hover:bg-teal-500 px-4 py-2 rounded-md text-slate-900 font-semibold transition-colors">
+					<div className="mb-12 flex items-center justify-between">
+						<div className="text-3xl font-light text-slate-200 tracking-tight">
+							Hey <span className="font-semibold text-teal-400">{userName}</span>, welcome to your start page
+						</div>
+						<button onClick={onToggleAddSite} className="bg-teal-500 hover:bg-teal-600 px-5 py-2.5 rounded-lg text-slate-900 font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/20 active:scale-95">
 							+ Add Site
 						</button>
 					</div>
-					<div className="flex flex-wrap gap-14 max-w-full">
+					<div className="flex flex-wrap gap-8 max-w-full">
 						{sites.map((site) => (
 							<AppCard key={`${site.name}-${site.url}`} site={site} isEditing={isEditing} onRemove={onRemove} />
 						))}

@@ -18,15 +18,15 @@ export default function Modal({ onClose, onAdd, currentSites }: ModalProps) {
 
 	return (
 		<div className="modal-overlay absolute" onClick={onClose}>
-			<div className="modal-content bg-slate-800 rounded-lg flex flex-col " onClick={(e) => e.stopPropagation()}>
-				<button className="flex justify-end w-full text-md text-teal-400 px-3 py-1 mb-5" onClick={onClose}>
+			<div className="modal-content bg-slate-800 bg-opacity-50 rounded-xl flex flex-col border border-slate-700 border-opacity-30 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
+				<button className="flex justify-end w-full text-sm font-medium text-teal-400 hover:text-teal-300 px-5 py-4 transition-colors" onClick={onClose}>
 					Close
 				</button>
 				<div className="scrollbar-thin scrollbar-thumb-cyan-800 scrollbar-track-sky-100 overflow-y-scroll">
-					<div className="flex justify-center px-6 my-2">
-						<input autoFocus type="text" placeholder="Search for a site..." value={query} onChange={(e) => setQuery(e.target.value)} className="p-2 rounded-lg bg-slate-700 text-slate-200 outline-none w-full" />
+					<div className="flex justify-center px-6 pt-4">
+						<input autoFocus type="text" placeholder="Search for a site..." value={query} onChange={(e) => setQuery(e.target.value)} className="p-3 rounded-lg bg-slate-800 bg-opacity-60 text-slate-200 outline-none w-full focus:ring-2 focus:ring-teal-500 transition-all" />
 					</div>
-					<div className="results overflow-y-auto m-auto pt-2 pb-10 flex flex-col justify-center gap-2">
+					<div className="results overflow-y-auto m-auto pt-2 pb-10 flex flex-col justify-center gap-2 px-4">
 						{results.map((site) => (
 							<div
 								key={site.url}
@@ -43,12 +43,12 @@ export default function Modal({ onClose, onAdd, currentSites }: ModalProps) {
 										});
 									}
 								}}
-								className={`result-divs w-full flex items-center gap-3 p-3 rounded-lg bg-slate-700 hover:bg-slate-900 cursor-pointer ${isAdded(site) ? "opacity-50 cursor-not-allowed" : "hover:bg-slate-700"}`}
+								className={`result-divs w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${isAdded(site) ? "opacity-50 cursor-not-allowed bg-slate-700 bg-opacity-30" : "bg-slate-700 bg-opacity-30 hover:bg-opacity-50 cursor-pointer"}`}
 							>
-								<img src={`https://www.google.com/s2/favicons?domain=${site.url}&sz=32`} alt={site.name} className="w-6 h-6" />
-								<span className="text-slate-200 text-sm">{site.name}</span>
-								<span className="ml-auto text-slate-300 text-xs">{site.category}</span>
-								{isAdded(site) && <span className="text-teal-400">✓</span>}
+								<img src={`https://www.google.com/s2/favicons?domain=${site.url}&sz=32`} alt={site.name} className="w-6 h-6 rounded" />
+								<span className="text-slate-200 text-sm font-medium flex-1">{site.name}</span>
+								<span className="text-slate-400 text-xs font-medium">{site.category}</span>
+								{isAdded(site) && <span className="text-teal-400 text-sm">✓</span>}
 							</div>
 						))}
 						{query.length > 0 && results.length === 0 && <p className="text-slate-500 text-sm text-center py-4">No results found</p>}

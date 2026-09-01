@@ -6,7 +6,24 @@ import { presets, type Workspace } from "./data/presets";
 import "./styles/index.css";
 
 function App() {
-	const [activeId, setActiveId] = useState(presets[0].id);
+	const [activeId, setActiveId] = useState(() => {
+		const saved = localStorage.getItem("activeWorkspace");
+		if (saved) return saved;
+
+		// If no saved workspace, check if any workspace has a matching time
+		const savedWorkspaces = localStorage.getItem("workspaces");
+		const workspacesData = savedWorkspaces ? JSON.parse(savedWorkspaces) : presets;
+
+		const now = new Date();
+		const currentTime = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+
+		const match = workspacesData
+			.filter((w: Workspace) => w.activeTime)
+			.sort((a: Workspace, b: Workspace) => (a.activeTime! > b.activeTime! ? -1 : 1))
+			.find((w: Workspace) => w.activeTime! <= currentTime);
+
+		return match?.id || presets[0].id;
+	});
 
 	const [workspaces, setWorkspaces] = useState(() => {
 		const saved = localStorage.getItem("workspaces");
@@ -21,29 +38,21 @@ function App() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const toggleModal = () => setIsModalOpen((prev) => !prev);
 
-	const [isEditing, setIsEditing] = useState(false);
-	const toggleEdit = () => setIsEditing((prev) => !prev);
-
 	const [isSitesEditing, setIsSitesEditing] = useState(false);
 	const toggleSitesEdit = () => setIsSitesEditing((prev) => !prev);
 
+	const [userName, setUserName] = useState(() => {
+		const saved = localStorage.getItem("userName");
+		return saved || "User";
+	});
+
 	useEffect(() => {
-		const checkTime = () => {
-			const now = new Date();
-			const currentTime = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+		localStorage.setItem("userName", userName);
+	}, [userName]);
 
-			const match = workspaces
-				.filter((w: Workspace) => w.activeTime)
-				.sort((a: Workspace, b: Workspace) => (a.activeTime! > b.activeTime! ? -1 : 1))
-				.find((w: Workspace) => w.activeTime! <= currentTime);
-
-			if (match) setActiveId(match.id);
-		};
-
-		checkTime();
-		const interval = setInterval(checkTime, 60000);
-		return () => clearInterval(interval);
-	}, []);
+	useEffect(() => {
+		localStorage.setItem("activeWorkspace", activeId);
+	}, [activeId]);
 
 	return (
 		<div className="flex flex-col h-screen w-screen overflow-hidden">
@@ -51,10 +60,7 @@ function App() {
 				<Sidebar
 					workspaces={workspaces}
 					activeId={activeId}
-					isEditing={isEditing}
 					onSelect={(id) => setActiveId(id)}
-					onToggleEdit={toggleEdit}
-					onToggleModal={toggleModal}
 					onAddWorkspace={(name) => {
 						const newWorkspace = {
 							id: name.toLowerCase().replace(/\s+/g, "-"),
@@ -74,6 +80,8 @@ function App() {
 						const updated = workspaces.map((w: Workspace) => (w.id === id ? { ...w, label: name } : w));
 						setWorkspaces(updated);
 					}}
+					userName={userName}
+					onSetUserName={setUserName}
 				/>
 				{isModalOpen && (
 					<Modal
@@ -90,6 +98,8 @@ function App() {
 					<AppGrid
 						sites={activeWorkspace?.sites ?? []}
 						isEditing={isSitesEditing}
+						userName={userName}
+						onToggleAddSite={toggleModal}
 						onRemove={(url) => {
 							const updated = workspaces.map((w: Workspace) => (w.id === activeId ? { ...w, sites: w.sites.filter((s) => s.url !== url) } : w));
 							setWorkspaces(updated);
